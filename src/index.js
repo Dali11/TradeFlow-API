@@ -44,6 +44,17 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
+app.get("/api/v1/status", async (req, res) => {
+  res.json({
+    stocks: { count: (cache.get("stocks") || []).length, hasData: (cache.get("stocks") || []).length > 0 },
+    indices: { count: (cache.get("indices") || []).length, hasData: (cache.get("indices") || []).length > 0 },
+    companies: { count: (cache.get("companies") || []).length, hasData: (cache.get("companies") || []).length > 0 },
+    lastUpdated: (typeof cache.getLastUpdated === 'function' ? cache.getLastUpdated() : null),
+    uptime: Math.floor(process.uptime()) + "s",
+    environment: process.env.NODE_ENV || "development"
+  });
+});
+
 app.use('/api/v1/stocks', stockRoutes);
 app.use('/api/v1/indices', indexRoutes);
 app.use('/api/v1/companies', companyRoutes);
