@@ -1,0 +1,7 @@
+node_modules
+.env
+*.tar.gz
+debug-scraper.js
+mse-page.html
+*.disabled
+.env.example
