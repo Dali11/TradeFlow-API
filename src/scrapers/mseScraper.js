@@ -1,6 +1,7 @@
 const cheerio = require('cheerio');
 const httpClient = require('../utils/httpClient');
 const cache = require('../utils/cache');
+const { recordLivePrice } = require("./historicalScraper");
 
 const BASE_URL = 'https://afx.kwayisi.org/mse';
 
@@ -64,6 +65,8 @@ const mseScraper = {
             const value = parseFloat((price * volume).toFixed(2));
             const listedShares = LISTED_SHARES[ticker] || null;
             const marketCap = listedShares ? Math.round(price * listedShares) : null;
+
+            recordLivePrice(ticker, price, volume, change);
 
             stocks.push({
               ticker, name, currency: "MWK", price, previousClose, change, changePercent, volume, value, marketCap,
