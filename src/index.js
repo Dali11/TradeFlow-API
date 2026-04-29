@@ -60,6 +60,37 @@ app.use('/api/v1/indices', indexRoutes);
 app.use('/api/v1/companies', companyRoutes);
 app.use('/api/v1/historical', historicalRoutes);
 
+app.get("/debug/historical", async (req, res) => {
+  try {
+    const httpClient = require("./utils/httpClient");
+    const cheerio = require("cheerio");
+    const url = "https://afx.kwayisi.org/mse/stock/nbm/";
+    const response = await httpClient.get(url);
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    const debug = {
+      url,
+      htmlLength: html.length,
+      htmlPreview: html.substring(0, 3000),
+      tablesFound: $("table").length,
+      totalRows: $("tr").length,
+      tables: []
+    };
+
+    $("table").each((i, table) => {
+      const headers = $(table).find("th").map((_, th) => $(th).text().trim()).get();
+      const firstRow = $(table).find("tr").eq(1).find("td").map((_, td) => $(td).text().trim()).get();
+      const rowCount = $(table).find("tr").length;
+      debug.tables.push({ index: i, headers, firstRow, rowCount });
+    });
+
+    res.json(debug);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+});
+
 // Error Handling
 app.use(errorHandler);
 
