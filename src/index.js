@@ -64,7 +64,7 @@ app.get("/debug/historical", async (req, res) => {
   try {
     const httpClient = require("./utils/httpClient");
     const cheerio = require("cheerio");
-    const url = "https://afx.kwayisi.org/mse/stock/nbm/";
+    const url = "https://afx.kwayisi.org/mse/nbm.html";
     const response = await httpClient.get(url, { timeout: 45000 });
     const html = response.data;
     const $ = cheerio.load(html);

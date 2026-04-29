@@ -1,8 +1,8 @@
 const axios = require('axios');
 
-const TIMEOUT = process.env.NODE_ENV === 'production' ? 30000 : 15000;
+const TIMEOUT = 45000;
 const MAX_RETRIES = process.env.NODE_ENV === 'production' ? 5 : 3;
-const DELAY = process.env.NODE_ENV === 'production' ? 500 : 1500;
+const DELAY = 300;
 
 /**
  * Axios wrapper with retries and delays
